@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /*jshint node:true, esversion:6 */
 const program = require('commander');
+const ncp = require('copy-paste');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const pkgjson = require('./package.json');
@@ -14,6 +15,7 @@ program
   .option('-p, --payload [file]', 'JSON file containing payload', 'payload.json')
   .option('-s, --secret <string>', 'Secret string with single quotes', 'secret')
   .option('-e, --expires', 'Expiration for token', '30d')
+  .option('-c, --copy', 'Copy JWT to system clipboard')
   .option('-v, --verbose', 'Show details')
   .parse(process.argv);
 
@@ -48,6 +50,10 @@ function createJWT(payload) {
             console.log("JWT:", token);
         } else {
             console.log(token);
+        }
+
+        if (program.copy) {
+            ncp.copy(token);
         }
         process.exit(0);
     });
