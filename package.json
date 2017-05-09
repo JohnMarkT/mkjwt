@@ -1,0 +1,28 @@
+{
+  "name": "mkjwt",
+  "version": "1.0.0+2017.05.09",
+  "description": "Make JWT",
+  "private": true,
+  "main": "index.js",
+  "bin": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnMarkT/mkjwt.git"
+  },
+  "keywords": [
+    "jwt"
+  ],
+  "author": "John Mark Thrasher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnMarkT/mkjwt/issues"
+  },
+  "homepage": "https://github.com/JohnMarkT/mkjwt#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "jsonwebtoken": "^7.4.0"
+  }
+}
