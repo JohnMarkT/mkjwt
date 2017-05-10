@@ -1,6 +1,6 @@
 {
   "name": "mkjwt",
-  "version": "1.0.1+2017.05.09",
+  "version": "1.0.2+2017.05.10",
   "description": "Make JWT",
   "private": true,
   "main": "index.js",

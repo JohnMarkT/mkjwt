@@ -14,7 +14,7 @@ program
   .usage('[options]')
   .option('-p, --payload [file]', 'JSON file containing payload', 'payload.json')
   .option('-s, --secret <string>', 'Secret string with single quotes', 'secret')
-  .option('-e, --expires', 'Expiration for token', '30d')
+  .option('-e, --expires [30d]', 'Expiration for token', '30d')
   .option('-c, --copy', 'Copy JWT to system clipboard')
   .option('-v, --verbose', 'Show details')
   .parse(process.argv);
@@ -23,6 +23,8 @@ const jwtOptions = {
         "algorithm": "HS256",
         "expiresIn": program.expires
     };
+
+console.log("jwtOptions:", jwtOptions);
 
 fs.readFile(program.payload, 'utf8', (err, data) => {
     if (err) {
