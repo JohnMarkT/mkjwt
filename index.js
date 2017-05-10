@@ -47,6 +47,10 @@ function createJWT(payload) {
         if (program.verbose) {
             console.log("SECRET:", program.secret);
             console.log("PAYLOAD:", JSON.stringify(payload, null, 4));
+            const exp = jwt.decode(token).exp;
+            if (exp) {
+                console.log("EXPIRES:", new Date(exp * 1000));
+            }
             console.log("JWT:", token);
         } else {
             console.log(token);
