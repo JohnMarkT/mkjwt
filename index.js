@@ -24,8 +24,6 @@ const jwtOptions = {
         "expiresIn": program.expires
     };
 
-console.log("jwtOptions:", jwtOptions);
-
 fs.readFile(program.payload, 'utf8', (err, data) => {
     if (err) {
         if (err.code === 'ENOENT') {
