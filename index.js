@@ -35,6 +35,9 @@ fs.readFile(program.payload, 'utf8', (err, data) => {
     if (!payload) {
         handleError("Please provide a valid JSON file for the payload");
     }
+    // delete expiration property from payload
+    delete payload.exp;
+    
     createJWT(payload);
 });
 
