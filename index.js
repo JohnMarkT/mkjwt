@@ -1,33 +1,34 @@
 #!/usr/bin/env node
 /*jshint node:true, esversion:6 */
-const program = require('commander');
+const { program } = require('commander');
 const ncp = require('copy-paste');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-const pkgjson = require('./package.json');
-
-const version = pkgjson.version.replace("+", " - ");
+const { version, description } = require('./package.json');
 
 program
-  .version(version)
-  .description(pkgjson.description)
+  .version(version.replace("+", " - "))
+  .description(description)
   .usage('[options]')
-  .option('-p, --payload [file]', 'JSON file containing payload', 'payload.json')
+  .option('-p, --payload <file>', 'JSON file containing payload', 'payload.json')
   .option('-s, --secret <string>', 'Secret string with single quotes', 'secret')
   .option('-e, --expires [30d]', 'Expiration for token', '30d')
   .option('-c, --copy', 'Copy JWT to system clipboard')
   .option('-v, --verbose', 'Show details')
   .parse(process.argv);
 
+const { payload: file, secret, expires, copy, verbose } = program.opts();
 const jwtOptions = {
-        "algorithm": "HS256",
-        "expiresIn": program.expires
+        algorithm: "HS256",
+        expiresIn: expires
     };
 
-fs.readFile(program.payload, 'utf8', (err, data) => {
+console.log('payload file:', file)
+
+fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
         if (err.code === 'ENOENT') {
-            handleError(`${program.payload} not found`);
+            handleError(`${file} not found`);
         }
         handleError(err);
     }
@@ -36,31 +37,31 @@ fs.readFile(program.payload, 'utf8', (err, data) => {
         handleError("Please provide a valid JSON file for the payload");
     }
     // delete expiration and issued properties from payload
-    delete payload.exp;
-    delete payload.iat;
+    Reflect.deleteProperty(payload, 'exp');
+    Reflect.deleteProperty(payload, 'iat');
 
     createJWT(payload);
 });
 
 function createJWT(payload) {
-    jwt.sign(payload, program.secret, jwtOptions, (err, token) => {
+    jwt.sign(payload, secret, jwtOptions, (err, token) => {
         if (err) {
             handleError(err);
         }
         
-        if (program.verbose) {
-            console.log("SECRET:", program.secret);
-            console.log("PAYLOAD:", JSON.stringify(payload, null, 4));
+        if (verbose) {
+            console.log("SECRET: %s", secret);
+            console.log("PAYLOAD: %o", payload);
             const exp = jwt.decode(token).exp;
             if (exp) {
-                console.log("EXPIRES:", new Date(exp * 1000));
+                console.log("EXPIRES: %s", new Date(exp * 1000));
             }
-            console.log("JWT:", token);
+            console.log("JWT: %s", token);
         } else {
             console.log(token);
         }
 
-        if (program.copy) {
+        if (copy) {
             ncp.copy(token);
         }
         process.exit(0);
